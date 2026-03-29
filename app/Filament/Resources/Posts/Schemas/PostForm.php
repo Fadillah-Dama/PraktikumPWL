@@ -29,10 +29,24 @@ class PostForm
                         ->columns(2) 
                         ->schema([
                             TextInput::make("title")
-                                ->minLength(5), 
+                                ->required()
+                                ->validationMessages([
+                                    'required'=>'Title wajib diisi'
+                                ])
+                                ->rules([
+                                    'required',
+                                    'min:5',
+                                    'max:50',
+                                ]), 
                             TextInput::make("slug")
-                                ->unique(),
+                                ->required()
+                                ->unique()
+                                ->minLength(3)
+                                ->validationMessages([
+                                    'unique'=>'Slug harus unik dan tidak boleh sama'
+                                ]),
                             Select::make("category_id")
+                                ->required()
                                 ->relationship("category", "name")
                                 ->preload()
                                 ->searchable(),
@@ -44,7 +58,7 @@ class PostForm
                         ]),
                 ])->columnSpan(2), 
 
-                -
+                
                 Group::make([ 
                     
                     // Section 2 - Image
@@ -52,6 +66,7 @@ class PostForm
                         ->icon('heroicon-o-photo') 
                         ->schema([
                             FileUpload::make("image")
+                                ->required()
                                 ->disk("public")
                                 ->directory("posts"),
                         ]),
