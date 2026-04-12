@@ -8,6 +8,8 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ProductInfolist
 {
@@ -16,9 +18,11 @@ class ProductInfolist
         return $schema
             ->components([
                 //
-                Section::make('Product Information')
-                    ->description('')
-                    ->schema([
+                Tabs::make('Product Information')
+                ->tabs([
+                    Tab::make('Product Details')
+                        ->icon('heroicon-o-academic-cap')
+                        ->schema([
                         TextEntry::make('name')
                             ->label('Product Name')
                             ->weight('bold')
@@ -35,38 +39,42 @@ class ProductInfolist
                             ->label('Product Creation Date')
                             ->date('d M Y')
                             ->color('info'),
-                    ])
-                ->columnSpanFull(),    
+                        ]),
 
-                Section::make('Price and Stock')
-                    ->description('')
-                    ->schema([
-                        TextEntry::make('price')
-                            ->label('Product Price')
-                            ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.'))
-                            ->weight('bold')
-                            ->color('primary')
-                            ->icon('heroicon-o-currency-dollar'),
-                        TextEntry::make('stock')
-                            ->label('Stock Quantity')
-                            ->icon('heroicon-o-archive-box')
-                    ])
-                ->columnSpanFull(),
+                    Tab::make('Product Price & Stock')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->badge(fn ($record) => $record->stock)
+                         ->schema([
+                            TextEntry::make('price')
+                                ->label('Product Price')
+                                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.'))
+                                ->weight('bold')
+                                ->color('primary')
+                                ->icon('heroicon-o-currency-dollar'),
+                            TextEntry::make('stock')
+                                ->label('Stock Quantity')
+                                ->icon('heroicon-o-archive-box')
+                        ]),
+                    
+                    Tab::make('Image & Status')
+                        ->icon('heroicon-o-photo')
+                        ->badgeColor('info')
+                        ->schema([
+                            ImageEntry::make('image')
+                                ->label('Product Image')
+                                ->disk('public'),
+                            IconEntry::make('is_active')
+                                ->label('Active Status')
+                                ->boolean(),
+                            IconEntry::make('is_featured')
+                                ->label('Featured Product')
+                                ->boolean(),  
+                        ]),
 
-                Section::make('Image and Status')
-                    ->description('')
-                    ->schema([
-                        ImageEntry::make('image')
-                            ->label('Product Image')
-                            ->disk('public'),
-                        IconEntry::make('is_active')
-                            ->label('Active Status')
-                            ->boolean(),
-                        IconEntry::make('is_featured')
-                            ->label('Featured Product')
-                            ->boolean(),  
-                    ])
-                ->columnSpanFull(),
+                ])
+                    ->columnSpanFull()
+                    ->vertical(),
+
             ]); 
     }
 }
