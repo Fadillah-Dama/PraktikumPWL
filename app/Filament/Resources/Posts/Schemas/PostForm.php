@@ -67,8 +67,11 @@ class PostForm
                         ->schema([
                             FileUpload::make("image")
                                 ->required()
+                                ->image()
                                 ->disk("public")
-                                ->directory("posts"),
+                                ->directory("posts")
+                                ->visibility('public')
+                                ->openable(),
                         ]),
 
                     // Section 3 - Meta

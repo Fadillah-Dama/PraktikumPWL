@@ -16,27 +16,28 @@ class PostsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort("created_at", "desc")
             ->columns([
                 //
-                TextColumn::make('title'),
-                TextColumn::make('slug'),
-                TextColumn::make('category.name'),
-                ColorColumn::make('color'),
-                ImageColumn::make('image')
-                    ->disk('public'),
-                IconColumn::make('published')
-                    ->boolean(),
+                TextColumn::make("title")->sortable(),
+                TextColumn::make("slug")->sortable(),
+                TextColumn::make("category.name")->sortable(),
+                TextColumn::make("created_at")
+                    ->label("Created At")
+                    ->dateTime()
+                    ->sortable(),
+                ColorColumn::make("color"),
+                ImageColumn::make("image")
+                    ->disk("public")
+                    ->visibility("public"),
+                IconColumn::make("published")->boolean(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }
