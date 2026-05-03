@@ -21,25 +21,45 @@ class PostsTable
         return $table
             ->defaultSort("created_at", "desc")
             ->columns([
-                //
+                TextColumn::make("id")
+                    ->label("ID")
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make("title")
+                    ->label("Title")
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make("slug")
+                    ->label("Slug")
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make("category.name")
+                    ->label("Category")
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make("tags")
+                    ->label("Tags")
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? implode(", ", $state) : (string) $state)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make("created_at")
                     ->label("Created At")
                     ->dateTime()
-                    ->sortable(),
-                ColorColumn::make("color"),
+                    ->sortable()
+                    ->toggleable(),
+                ColorColumn::make("color")
+                    ->label("Color")
+                    ->toggleable(),
                 ImageColumn::make("image")
+                    ->label("Image")
                     ->disk("public")
-                    ->visibility("public"),
-                IconColumn::make("published")->boolean(),
+                    ->visibility("public")
+                    ->toggleable(),
+                IconColumn::make("published")
+                    ->label("Published")
+                    ->boolean()
+                    ->toggleable(),
             ])
             ->filters([
                 Filter::make("created_at")
