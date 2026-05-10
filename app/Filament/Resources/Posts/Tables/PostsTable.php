@@ -45,9 +45,11 @@ class PostsTable
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('tags')
+                TextColumn::make('tags.name')
                     ->label('Tags')
-                    ->formatStateUsing(fn ($state): string => is_array($state) ? implode(', ', $state) : (string) $state)
+                    ->badge()
+                    ->separator(',')
+                    ->listWithLineBreaks()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Created At')

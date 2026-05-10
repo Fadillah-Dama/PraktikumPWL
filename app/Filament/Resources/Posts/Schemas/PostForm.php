@@ -8,7 +8,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
@@ -49,7 +48,7 @@ class PostForm
                                 ->required()
                                 ->relationship('category', 'name')
                                 // Memuat daftar kategori saat form dibuka agar opsi langsung tersedia.
-                               // ->preload()
+                                ->preload()
                                 ->searchable(),
                             ColorPicker::make('color'),
 
@@ -77,7 +76,11 @@ class PostForm
                     Section::make('Meta Information')
                         ->icon('heroicon-o-tag')
                         ->schema([
-                            TagsInput::make('tags'),
+                            Select::make('tags')
+                                ->relationship('tags', 'name')
+                                ->multiple()
+                                ->preload()
+                                ->searchable(),
                             Checkbox::make('published'),
 
                             DateTimePicker::make('published_at')
